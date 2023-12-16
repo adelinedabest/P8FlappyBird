@@ -8,19 +8,26 @@ public class GameControl : MonoBehaviour {
 
     public static GameControl instance;
     public GameObject gameOverText;
-    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI ScoreUI;
     public bool gameOver = false;
     public float scrollSpeed = -1.5f;
 
     private int score = 0;
 
+    AudioSource audioSource;
+    public AudioClip scoreSound;
+
+    private void Start ()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     void Awake()
     {
         if (instance == null) {
             instance = this;
         } else if (instance != this)
         {
-            Destroy(gameObject);
+            Destroy (gameObject);
         }
         
     }
@@ -41,11 +48,17 @@ public class GameControl : MonoBehaviour {
             return;
         }
         score++;
-        scoreText.text = "Score: " + score.ToString ();
+        ScoreUI.text = "Score: " + score.ToString ();
+        PlaySound(scoreSound);
     }
     public void BirdDied()
     {
         gameOverText.SetActive (true);
         gameOver = true;
+    }
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+
     }
 }
